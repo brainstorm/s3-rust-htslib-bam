@@ -1,4 +1,4 @@
-use std::path::Path;
+//use std::path::Path;
 
 use url::Url;
 use crate::reader::BamReader;

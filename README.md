@@ -10,7 +10,7 @@ If that is in order, clone this repository and build away:
 
 ```
 $ cross build --release --target x86_64-unknown-linux-musl
-$ cdk deploy
+$ cd deploy && cdk deploy
 rust-htslib-lambda: deploying...
 [0%] start: Publishing c59cf9536e04f460efe5bf09a3e7404d2f0dbf43be6a353e09e46c4e0b574d37:current
 [100%] success: Published c59cf9536e04f460efe5bf09a3e7404d2f0dbf43be6a353e09e46c4e0b574d37:current
