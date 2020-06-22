@@ -1,0 +1,19 @@
+[package]
+name = "s3-htslib-bamheader"
+version = "0.1.0"
+authors = ["Roman Valls Guimera <brainstorm@nopcode.org>"]
+edition = "2018"
+
+[dependencies]
+snafu = { version = "0.6.8" }
+url = { version = "2.1.1" }
+rust-htslib = { git = "https://github.com/rust-bio/rust-htslib.git", features = ["s3", "static"] }
+
+[[ bin ]]
+name = "bootstrap"
+path = "src/main.rs"
+
+#[profile.release]
+#lto = true
+#opt-level = 'z'
+#codegen-units = 1
