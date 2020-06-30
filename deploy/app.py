@@ -24,6 +24,11 @@ class rustHtslibLambda(core.Stack):
             bucket_name=BUCKET
         )
 
+        external_bucket = s3.Bucket.from_bucket_attributes(
+            self, 'ExternalBucket',
+            bucket_name="gatk-test-data"
+        )
+
         lambdaFn = lambda_.Function(
             self, 'rust_htslib_lambda',
             handler='main',
@@ -31,8 +36,9 @@ class rustHtslibLambda(core.Stack):
             runtime=lambda_.Runtime.PROVIDED,
             timeout=core.Duration.seconds(10)
         )
-
+        
         lambda_bucket.grant_read(lambdaFn, KEY_ACL)
+        external_bucket.grant_read(lambdaFn)
 
 app = core.App()
 
