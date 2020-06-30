@@ -45,187 +45,108 @@ On another (tmux) terminal, before invoking the lambda function:
 
 ```
 $ cw tail -f /aws/lambda/rust-htslib-lambda
-START RequestId: 4a75c2f1-7a35-4a68-9ab8-105dd0d10f9a Version: $LATEST
-
-[E::hts_open_format] Failed to open file "s3://gatk-test-data/wgs_bam/NA12878_24RG_hg38/NA12878_24RG_small.hg38.bam" : I/O error
-
-thread 'main' panicked at 'called `Result::unwrap()` on an `Err` value: BamOpen { source: Open { target: "s3://gatk-test-data/wgs_bam/NA12878_24RG_hg38/NA12878_24RG_small.hg38.bam" } }', src/main.rs:17:12
-
-stack backtrace:
-
-0:           0x641674 - backtrace::backtrace::libunwind::trace::h234d741a55b60f88
-at /cargo/registry/src/github.com-1ecc6299db9ec823/backtrace-0.3.46/src/backtrace/libunwind.rs:86
-
-1:           0x641674 - backtrace::backtrace::trace_unsynchronized::h350b2c8c65b00d1d
-
-at /cargo/registry/src/github.com-1ecc6299db9ec823/backtrace-0.3.46/src/backtrace/mod.rs:66
-
-2:           0x641674 - std::sys_common::backtrace::_print_fmt::h4a536ea1c8e8e74a
-
-at src/libstd/sys_common/backtrace.rs:78
-
-3:           0x641674 - <std::sys_common::backtrace::_print::DisplayBacktrace as core::fmt::Display>::fmt::had63074188e24509
-
-at src/libstd/sys_common/backtrace.rs:59
-
-4:           0x67b09c - core::fmt::write::h0f3ca38b916f7bdd
-
-at src/libcore/fmt/mod.rs:1069
-
-5:           0x63f6d3 - std::io::Write::write_fmt::h904ea4dad7931404
-
-at src/libstd/io/mod.rs:1504
-
-6:           0x643b95 - std::sys_common::backtrace::_print::h5b567d4903ca6eb3
-
-at src/libstd/sys_common/backtrace.rs:62
-
-7:           0x643b95 - std::sys_common::backtrace::print::hf98b9b1b18a4dc81
-
-at src/libstd/sys_common/backtrace.rs:49
-
-8:           0x643b95 - std::panicking::default_hook::{{closure}}::h5fbf8e21242992f2
-
-at src/libstd/panicking.rs:198
-
-9:           0x6438d2 - std::panicking::default_hook::hb4d89e36502020cd
-
-at src/libstd/panicking.rs:218
-
-10:           0x6441a2 - std::panicking::rust_panic_with_hook::hc36f90fb81cc1268
-
-at src/libstd/panicking.rs:511
-
-11:           0x643d8b - rust_begin_unwind
-
-at src/libstd/panicking.rs:419
-
-12:           0x67a481 - core::panicking::panic_fmt::h31cb4ec4ac5347b3
-
-at src/libcore/panicking.rs:111
-
-13:           0x67a2a3 - core::option::expect_none_failed::h3e3ee4886fcb0833
-
-at src/libcore/option.rs:1268
-
-14:           0x402134 - bootstrap::main::h4cfb5e1da07e4c36
-
-15:           0x401903 - std::rt::lang_start::{{closure}}::h71ce4b28a2a11ce2
-
-16:           0x6444d1 - std::rt::lang_start_internal::{{closure}}::ha24276d619b0834a
-
-at src/libstd/rt.rs:52
-
-17:           0x6444d1 - std::panicking::try::do_call::ha58b8718efdbddf5
-
-at src/libstd/panicking.rs:331
-
-18:           0x6444d1 - std::panicking::try::h2d6d423bf379e813
-
-at src/libstd/panicking.rs:274
-
-19:           0x6444d1 - std::panic::catch_unwind::h45b4b6133cb33025
-
-at src/libstd/panic.rs:394
-
-20:           0x6444d1 - std::rt::lang_start_internal::h47125699e3ec3d7e
-
-at src/libstd/rt.rs:51
-
-21:           0x402222 - main
-
-END RequestId: 4a75c2f1-7a35-4a68-9ab8-105dd0d10f9a
-
-REPORT RequestId: 4a75c2f1-7a35-4a68-9ab8-105dd0d10f9a  Duration: 911.60 ms     Billed Duration: 1000 ms        Memory Size: 128 MB     Max Memory Used: 16 MB
-
-RequestId: 4a75c2f1-7a35-4a68-9ab8-105dd0d10f9a Error: Runtime exited with error: exit status 101
-Runtime.ExitError
-
-[E::hts_open_format] Failed to open file "s3://gatk-test-data/wgs_bam/NA12878_24RG_hg38/NA12878_24RG_small.hg38.bam" : I/O error
-
-thread 'main' panicked at 'called `Result::unwrap()` on an `Err` value: BamOpen { source: Open { target: "s3://gatk-test-data/wgs_bam/NA12878_24RG_hg38/NA12878_24RG_small.hg38.bam" } }', src/main.rs:17:12
-
-stack backtrace:
-
-0:           0x641674 - backtrace::backtrace::libunwind::trace::h234d741a55b60f88
-
-at /cargo/registry/src/github.com-1ecc6299db9ec823/backtrace-0.3.46/src/backtrace/libunwind.rs:86
-
-1:           0x641674 - backtrace::backtrace::trace_unsynchronized::h350b2c8c65b00d1d
-
-at /cargo/registry/src/github.com-1ecc6299db9ec823/backtrace-0.3.46/src/backtrace/mod.rs:66
-
-2:           0x641674 - std::sys_common::backtrace::_print_fmt::h4a536ea1c8e8e74a
-
-at src/libstd/sys_common/backtrace.rs:78
-
-3:           0x641674 - <std::sys_common::backtrace::_print::DisplayBacktrace as core::fmt::Display>::fmt::had63074188e24509
-
-at src/libstd/sys_common/backtrace.rs:59
-
-4:           0x67b09c - core::fmt::write::h0f3ca38b916f7bdd
-
-at src/libcore/fmt/mod.rs:1069
-
-5:           0x63f6d3 - std::io::Write::write_fmt::h904ea4dad7931404
-
-at src/libstd/io/mod.rs:1504
-
-6:           0x643b95 - std::sys_common::backtrace::_print::h5b567d4903ca6eb3
-
-at src/libstd/sys_common/backtrace.rs:62
-
-7:           0x643b95 - std::sys_common::backtrace::print::hf98b9b1b18a4dc81
-
-at src/libstd/sys_common/backtrace.rs:49
-
-8:           0x643b95 - std::panicking::default_hook::{{closure}}::h5fbf8e21242992f2
-
-at src/libstd/panicking.rs:198
-
-9:           0x6438d2 - std::panicking::default_hook::hb4d89e36502020cd
-
-at src/libstd/panicking.rs:218
-
-10:           0x6441a2 - std::panicking::rust_panic_with_hook::hc36f90fb81cc1268
-
-at src/libstd/panicking.rs:511
-
-11:           0x643d8b - rust_begin_unwind
-
-at src/libstd/panicking.rs:419
-
-12:           0x67a481 - core::panicking::panic_fmt::h31cb4ec4ac5347b3
-
-at src/libcore/panicking.rs:111
-
-13:           0x67a2a3 - core::option::expect_none_failed::h3e3ee4886fcb0833
-
-at src/libcore/option.rs:1268
-
-14:           0x402134 - bootstrap::main::h4cfb5e1da07e4c36
-
-15:           0x401903 - std::rt::lang_start::{{closure}}::h71ce4b28a2a11ce2
-
-16:           0x6444d1 - std::rt::lang_start_internal::{{closure}}::ha24276d619b0834a
-
-at src/libstd/rt.rs:52
-
-17:           0x6444d1 - std::panicking::try::do_call::ha58b8718efdbddf5
-
-at src/libstd/panicking.rs:331
-
-18:           0x6444d1 - std::panicking::try::h2d6d423bf379e813
-
-at src/libstd/panicking.rs:274
-
-19:           0x6444d1 - std::panic::catch_unwind::h45b4b6133cb33025
-
-at src/libstd/panic.rs:394
-
-20:           0x6444d1 - std::rt::lang_start_internal::h47125699e3ec3d7e
-
-at src/libstd/rt.rs:51
-
-21:           0x402222 - main
+(...)
+< HTTP/1.1 200 OK
+< x-amz-id-2: hash 
+< x-amz-request-id: hash
+< Date: Tue, 30 Jun 2020 05:46:22 GMT
+< Last-Modified: Thu, 07 May 2020 06:36:24 GMT
+< ETag: "6dc47e886b9f2ecef870af88da3ebdd6"
+< Accept-Ranges: bytes
+< Content-Type: binary/octet-stream
+< Content-Length: 2596799
+< Server: AmazonS3
+< 
+* Closing connection 0
+[src/main.rs:20] "BAM header targets are: {}" = "BAM header targets are: {}"
+[src/main.rs:20] res = [
+    "1",
+    "2",
+    "3",
+    "4",
+    "5",
+    "6",
+    "7",
+    "8",
+    "9",
+    "10",
+    "11",
+    "12",
+    "13",
+    "14",
+    "15",
+    "16",
+    "17",
+    "18",
+    "19",
+    "20",
+    "21",
+    "22",
+    "X",
+    "Y",
+    "MT",
+    "GL000207.1",
+    "GL000226.1",
+    "GL000229.1",
+    "GL000231.1",
+    "GL000210.1",
+    "GL000239.1",
+    "GL000235.1",
+    "GL000201.1",
+    "GL000247.1",
+    "GL000245.1",
+    "GL000197.1",
+    "GL000203.1",
+    "GL000246.1",
+    "GL000249.1",
+    "GL000196.1",
+    "GL000248.1",
+    "GL000244.1",
+    "GL000238.1",
+    "GL000202.1",
+    "GL000234.1",
+    "GL000232.1",
+    "GL000206.1",
+    "GL000240.1",
+    "GL000236.1",
+    "GL000241.1",
+    "GL000243.1",
+    "GL000242.1",
+    "GL000230.1",
+    "GL000237.1",
+    "GL000233.1",
+    "GL000204.1",
+    "GL000198.1",
+    "GL000208.1",
+    "GL000191.1",
+    "GL000227.1",
+    "GL000228.1",
+    "GL000214.1",
+    "GL000221.1",
+    "GL000209.1",
+    "GL000218.1",
+    "GL000220.1",
+    "GL000213.1",
+    "GL000211.1",
+    "GL000199.1",
+    "GL000217.1",
+    "GL000216.1",
+    "GL000215.1",
+    "GL000205.1",
+    "GL000219.1",
+    "GL000224.1",
+    "GL000223.1",
+    "GL000195.1",
+    "GL000212.1",
+    "GL000222.1",
+    "GL000200.1",
+    "GL000193.1",
+    "GL000194.1",
+    "GL000225.1",
+    "GL000192.1",
+    "NC_007605",
+    "hs37d5",
+]
+END RequestId: fdd85a16-f4e0-4d35-9cca-7f35c696bf21
+REPORT RequestId: fdd85a16-f4e0-4d35-9cca-7f35c696bf21    Duration: 470.63 ms    Billed Duration: 500 ms    Memory Size: 128 MB    Max Memory Used: 7 MB
 ```

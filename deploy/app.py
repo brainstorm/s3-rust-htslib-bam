@@ -9,6 +9,7 @@ from aws_cdk import (
 
 s3c = boto3.client('s3')
 
+CA_BUNDLE="cert.pem"
 BUCKET="umccr-research-dev"
 ASSET="bootstrap.zip"
 KEY="htsget/app/{}".format(ASSET)
@@ -37,18 +38,16 @@ class rustHtslibLambda(core.Stack):
             timeout=core.Duration.seconds(10)
         )
         
+        lambdaFn.add_environment("CURL_CA_BUNDLE", CA_BUNDLE)
         lambda_bucket.grant_read(lambdaFn, KEY_ACL)
         external_bucket.grant_read(lambdaFn)
 
 app = core.App()
 
 # Pack for lambda PROVIDED runtime (must be a .zip)...
-# XXX: if TARGET_PATH does not exist
-# cross build --release --target x86_64-unknown-linux-musl
-# Possibly leverage this: https://github.com/vvilhonen/cargo-aws-lambda
-# And have it as just "cargo deploy" with no configuration
 with ZipFile(ASSET, 'w') as fzip:
-    fzip.write(TARGET_PATH, "bootstrap")       
+    fzip.write(TARGET_PATH, "bootstrap")
+    fzip.write(CA_BUNDLE)
 
 # ... and ship it!
 rustHtslibLambda(app, "rust-htslib-lambda")
