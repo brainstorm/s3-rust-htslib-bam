@@ -5,6 +5,7 @@ This small PoC assumes that:
 1. You are already authenticated against AWS
 2. [AWS CDK](https://aws.amazon.com/cdk/) is properly installed.
 3. You have a [functioning Rust(up) installation](https://rustup.rs/), docker and [`cross`](https://github.com/rust-embedded/cross).
+4. You pointed [`BUCKET` and `KEY` on `main.rs`](https://github.com/brainstorm/s3-rust-htslib-bam/blob/60389d7c637ce2f8c172c64f75659a519b3c4d4b/src/main.rs#L9) towards the BAM file you want to work with.
 
 If that is in order, clone this repository and build away:
 
