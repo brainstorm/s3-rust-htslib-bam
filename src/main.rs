@@ -23,16 +23,16 @@ async fn main() -> Result<(), Error> {
 async fn bam_header(_event: Request, _: Context) -> Result<impl IntoResponse, Error> {
     const BUCKET: &str = "umccr-research-dev";
     const KEY: &str = "htsget/htsnexus_test_NA12878.bam";
-        
+
     // Get some lowlevel libcurl action on hfile_curl/s3 from htslib
     // WARNING: Disable for production use as it prints out secret tokens on CloudWatch!
     // hts_set_log_level(10);
-    let bam_head = bam_header_s3(BUCKET, KEY);
+    let bam_head = bam_header_s3(BUCKET, KEY).await;
 
     Ok(json!(bam_head))
 }
 
-pub fn bam_header_s3(bucket: &str, key: &str) -> Vec<String> {
+async fn bam_header_s3(bucket: &str, key: &str) -> Vec<String> {
     let s3_url = Url::parse(&("s3://".to_string() + &bucket + "/" + &key)).unwrap();
     let reader = BamReader::new(s3_url);
     return reader.unwrap().target_names();
