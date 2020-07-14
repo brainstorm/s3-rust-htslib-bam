@@ -1,16 +1,26 @@
 # Read BAM header on an AWS lambda with rust-htslib
 
-This small PoC assumes that:
+This small Bioinformatics proof of concept that bundles [htslib](http://github.com/samtools/htslib) into an AWS Lambda for massive distributed computing. This only prints a BAM header, but I hope you see the massive scaling potential, hitting an S3 bucket with milions of concurrent lambdas will be interesting to see ;)
 
-1. You are already authenticated against AWS
+To make this work, this README assumes the following prerequisites:
+
+1. You are already authenticated against AWS.
 2. [AWS CDK](https://aws.amazon.com/cdk/) is properly installed.
 3. You have a [functioning Rust(up) installation](https://rustup.rs/), docker and [`cross`](https://github.com/rust-embedded/cross).
 4. You pointed [`BUCKET` and `KEY` on `main.rs`](https://github.com/brainstorm/s3-rust-htslib-bam/blob/60389d7c637ce2f8c172c64f75659a519b3c4d4b/src/main.rs#L9) towards the BAM file you want to work with.
+5. Run with a proper Lambda HTTP payload (example in `deploy/lambda_test_event.json`).
 
-If that is in order, clone this repository and build away:
+TODO: Properly parametrize points 4 and 5 for more ergonomic operation.
+
+If that is in order, clone this repository and build away with MUSL:
 
 ```
 $ cross build --release --target x86_64-unknown-linux-musl
+```
+
+Then deploy with [AWS CDK](https://aws.amazon.com/cdk/):
+
+```
 $ cd deploy && cdk deploy
 rust-htslib-lambda: deploying...
 [0%] start: Publishing c59cf9536e04f460efe5bf09a3e7404d2f0dbf43be6a353e09e46c4e0b574d37:current
@@ -25,7 +35,7 @@ Stack ARN:
 arn:aws:cloudformation:ap-southeast-2:<ACCT_ID>:stack/rust-htslib-lambda/33990140-a619-11ea-98e1-0a1a04ef0eac
 ```
 
-Then once deployed, invoke the lambda:
+And finally, invoke the lambda:
 
 ```
 $ aws lambda invoke --function-name "arn:aws:lambda:ap-southeast-2:<ACCT_ID>:function:rust-htslib-lambda" response.json
@@ -86,68 +96,14 @@ $ cw tail -f /aws/lambda/rust-htslib-lambda
     "X",
     "Y",
     "MT",
-    "GL000207.1",
-    "GL000226.1",
-    "GL000229.1",
-    "GL000231.1",
-    "GL000210.1",
-    "GL000239.1",
-    "GL000235.1",
-    "GL000201.1",
-    "GL000247.1",
-    "GL000245.1",
-    "GL000197.1",
-    "GL000203.1",
-    "GL000246.1",
-    "GL000249.1",
-    "GL000196.1",
-    "GL000248.1",
-    "GL000244.1",
-    "GL000238.1",
-    "GL000202.1",
-    "GL000234.1",
-    "GL000232.1",
-    "GL000206.1",
-    "GL000240.1",
-    "GL000236.1",
-    "GL000241.1",
-    "GL000243.1",
-    "GL000242.1",
-    "GL000230.1",
-    "GL000237.1",
-    "GL000233.1",
-    "GL000204.1",
-    "GL000198.1",
-    "GL000208.1",
-    "GL000191.1",
-    "GL000227.1",
-    "GL000228.1",
-    "GL000214.1",
-    "GL000221.1",
-    "GL000209.1",
-    "GL000218.1",
-    "GL000220.1",
-    "GL000213.1",
-    "GL000211.1",
-    "GL000199.1",
-    "GL000217.1",
-    "GL000216.1",
-    "GL000215.1",
-    "GL000205.1",
-    "GL000219.1",
-    "GL000224.1",
-    "GL000223.1",
-    "GL000195.1",
-    "GL000212.1",
-    "GL000222.1",
-    "GL000200.1",
-    "GL000193.1",
-    "GL000194.1",
-    "GL000225.1",
-    "GL000192.1",
+	(...)
     "NC_007605",
     "hs37d5",
 ]
 END RequestId: fdd85a16-f4e0-4d35-9cca-7f35c696bf21
 REPORT RequestId: fdd85a16-f4e0-4d35-9cca-7f35c696bf21    Duration: 470.63 ms    Billed Duration: 500 ms    Memory Size: 128 MB    Max Memory Used: 7 MB
 ```
+
+Or via the AWS web console:
+
+![lambda http exec](img/rust-lambda-http-success.png)
