@@ -1,6 +1,7 @@
 use url::Url;
 
 use serde_derive::{Serialize, Deserialize};
+use serde_json::json;
 use lambda_http::{
     handler,
     lambda::{self, Context},
@@ -31,12 +32,12 @@ async fn bam_header(event: Request, _: Context) -> Result<impl IntoResponse, Err
 
     // const BUCKET: &str = "gatk-test-data";
     // const KEY: &str = "wgs_bam/NA12878_24RG_hg38/NA12878_24RG_small.hg38.bam";
-    let bam_head = bam_header_s3(BUCKET, KEY);
+    let bam_head: Vec<String> = bam_header_s3(BUCKET, KEY);
 
     Ok(match event.body() {
         _ => Response::builder()
             .status(200)
-            .body(serde_json::to_string(&bam_head))
+            .body(json!(bam_head))
             .expect("failed to render response"),
     })
 }
