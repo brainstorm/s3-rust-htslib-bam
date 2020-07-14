@@ -26,7 +26,7 @@ async fn main() -> Result<(), Error> {
     Ok(())
 }
 
-async fn bam_header(event: Request, _: Context) -> Result<impl IntoResponse, Error> {
+async fn bam_header(_event: Request, _: Context) -> Result<impl IntoResponse, Error> {
     const BUCKET: &str = "umccr-research-dev";
     const KEY: &str = "htsget/htsnexus_test_NA12878.bam";
 
@@ -34,12 +34,14 @@ async fn bam_header(event: Request, _: Context) -> Result<impl IntoResponse, Err
     // const KEY: &str = "wgs_bam/NA12878_24RG_hg38/NA12878_24RG_small.hg38.bam";
     let bam_head: Vec<String> = bam_header_s3(BUCKET, KEY);
 
-    Ok(match event.body() {
-        _ => Response::builder()
-            .status(200)
-            .body(json!(bam_head))
-            .expect("failed to render response"),
-    })
+    Ok(json!(bam_head))
+    // Ok(match event.body() {
+    //     _ => Response::builder()
+    //         .status(200)
+    //         .body(json!(bam_head))
+    //         .body(serde_json::to_value(bam_head)?)
+    //         .expect("failed to render response"),
+    // })
 }
 
 pub fn bam_header_s3(bucket: &str, key: &str) -> Vec<String> {
