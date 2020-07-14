@@ -1,11 +1,11 @@
 use url::Url;
 
-use serde_derive::{Serialize, Deserialize};
+use serde_derive::{Serialize};//, Deserialize};
 use serde_json::json;
 use lambda_http::{
     handler,
     lambda::{self, Context},
-    IntoResponse, Request, RequestExt, Response,
+    Body, IntoResponse, Request//, RequestExt, Response,
 };
 use crate::reader::BamReader;
 use rust_htslib::htslib;
@@ -17,11 +17,6 @@ type Error = Box<dyn std::error::Error + Send + Sync + 'static>;
 
 #[tokio::main]
 async fn main() -> Result<(), Error> {
-    // Get some lowlevel libcurl action on hfile_curl/s3 from htslib
-    // WARNING: Disable for production use as it prints out secret tokens on CloudWatch!
-    // hts_set_log_level(10);
-
-    // And run the lambda
     lambda::run(handler(bam_header)).await?;
     Ok(())
 }
@@ -32,16 +27,13 @@ async fn bam_header(_event: Request, _: Context) -> Result<impl IntoResponse, Er
 
     // const BUCKET: &str = "gatk-test-data";
     // const KEY: &str = "wgs_bam/NA12878_24RG_hg38/NA12878_24RG_small.hg38.bam";
-    let bam_head: Vec<String> = bam_header_s3(BUCKET, KEY);
+    
+    // Get some lowlevel libcurl action on hfile_curl/s3 from htslib
+    // WARNING: Disable for production use as it prints out secret tokens on CloudWatch!
+    hts_set_log_level(10);
+    let bam_head = bam_header_s3(BUCKET, KEY);
 
-    Ok(json!(bam_head))
-    // Ok(match event.body() {
-    //     _ => Response::builder()
-    //         .status(200)
-    //         .body(json!(bam_head))
-    //         .body(serde_json::to_value(bam_head)?)
-    //         .expect("failed to render response"),
-    // })
+    Ok(CustomOutput::new(bam_head).into_response())
 }
 
 pub fn bam_header_s3(bucket: &str, key: &str) -> Vec<String> {
@@ -57,21 +49,21 @@ pub fn hts_set_log_level(level: u32) {
 }
 
 // Lambda-specific response structs
-#[derive(Serialize, Deserialize, Clone)]
-struct Body {
-    #[serde(rename = "bam_header")]
-    bam_header: Vec<String>,
-}
-
 #[derive(Serialize, Clone)]
 struct CustomOutput {
-    body: String,
+    body: Vec<String>,
 }
 
 impl CustomOutput {
-    fn new(body: String) -> Self {
+    fn new(body: Vec<String>) -> Self {
         CustomOutput {
             body,
         }
+    }
+}
+
+impl Into<Body> for CustomOutput {
+    fn into(self) -> Body {
+        json!(self.body).to_string().into()
     }
 }
