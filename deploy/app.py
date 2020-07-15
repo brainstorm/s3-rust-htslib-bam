@@ -39,6 +39,7 @@ class rustHtslibLambda(core.Stack):
         )
         
         lambdaFn.add_environment("CURL_CA_BUNDLE", CA_BUNDLE)
+        lambdaFn.add_event_source
         lambda_bucket.grant_read(lambdaFn, KEY_ACL)
         external_bucket.grant_read(lambdaFn)
 
