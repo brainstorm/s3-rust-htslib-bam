@@ -10,7 +10,7 @@ To make this work, this README assumes the following prerequisites:
 4. You pointed [`BUCKET` and `KEY` on `main.rs`](https://github.com/brainstorm/s3-rust-htslib-bam/blob/60389d7c637ce2f8c172c64f75659a519b3c4d4b/src/main.rs#L9) towards the BAM file you want to work with.
 5. Run with a proper Lambda HTTP payload (example in `deploy/lambda_test_event.json`).
 
-TODO: Properly parametrize points 4 and 5 for more ergonomic operation.
+### **TODO: Properly parametrize points 4 and 5 for more ergonomic operation (via cdk.json or similar?).**
 
 If that is in order, clone this repository and build away with MUSL:
 
