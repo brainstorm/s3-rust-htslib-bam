@@ -1,5 +1,5 @@
-use snafu::Snafu;
 use rust_htslib::bam;
+use snafu::Snafu;
 
 #[derive(Debug, Snafu)]
 //#[snafu(visibility = "pub")]

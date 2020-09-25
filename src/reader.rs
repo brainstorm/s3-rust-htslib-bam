@@ -1,10 +1,10 @@
 //use std::path::Path;
 use url::Url;
 
-use rust_htslib::bam::{ Reader, Record, Read };
 use rust_htslib::bam::ext::BamRecordExtensions;
+use rust_htslib::bam::{Read, Reader, Record};
 
-use crate::errors::{ Result, Error };
+use crate::errors::{Error, Result};
 
 pub type TargetId = i32;
 pub type Offset = i64;
@@ -35,16 +35,13 @@ impl FileOffsets {
         if vo1.coffset == vo2.coffset {
             if vo1.uoffset <= vo2.uoffset {
                 vo1
-            }
-            else {
+            } else {
                 vo2
             }
-        }
-        else {
+        } else {
             if vo1.coffset <= vo2.coffset {
                 vo1
-            }
-            else {
+            } else {
                 vo2
             }
         }
@@ -54,16 +51,13 @@ impl FileOffsets {
         if vo1.coffset == vo2.coffset {
             if vo1.uoffset >= vo2.uoffset {
                 vo1
-            }
-            else {
+            } else {
                 vo2
             }
-        }
-        else {
+        } else {
             if vo1.coffset >= vo2.coffset {
                 vo1
-            }
-            else {
+            } else {
                 vo2
             }
         }
@@ -99,7 +93,10 @@ impl BamReader {
     // }
 
     pub fn target_names(&self) -> Vec<String> {
-        self.reader.header().target_names().into_iter()
+        self.reader
+            .header()
+            .target_names()
+            .into_iter()
             .map(|raw_name| String::from_utf8_lossy(raw_name).to_string())
             .collect()
     }
@@ -110,8 +107,7 @@ impl BamReader {
         match self.reader.read(&mut record) {
             Ok(true) => {
                 let length = record.inner().l_data as Offset;
-                let file_end = FileOffsets::new(file_start.coffset,
-                                                           file_start.uoffset + length);
+                let file_end = FileOffsets::new(file_start.coffset, file_start.uoffset + length);
 
                 let read = BamRead {
                     file_start,

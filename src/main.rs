@@ -6,8 +6,8 @@ use url::Url;
 
 use crate::reader::BamReader;
 
-pub mod reader;
 pub mod errors;
+pub mod reader;
 
 type Error = Box<dyn std::error::Error + Send + Sync + 'static>;
 
@@ -27,7 +27,9 @@ async fn bam_header(event: Value, _: Context) -> Result<Value, Error> {
     let s3_url = match event.get("bam") {
         Some(a) => Url::parse(&a.as_str().unwrap()).unwrap(),
         None => {
-            return Ok(json!({"error": "Must pass the S3 location of a BAM in as the 'bam' field of the lambda event"}));
+            return Ok(
+                json!({"error": "Must pass the S3 location of a BAM in as the 'bam' field of the lambda event"}),
+            );
         }
     };
 
