@@ -1,13 +1,8 @@
 use lambda::{handler_fn, Context};
-use rust_htslib::htslib;
+use rust_htslib::{bam, bam::Read, htslib};
 use serde_json::json;
 use serde_json::Value;
 use url::Url;
-
-use crate::reader::BamReader;
-
-pub mod errors;
-pub mod reader;
 
 type Error = Box<dyn std::error::Error + Send + Sync + 'static>;
 
@@ -18,7 +13,6 @@ async fn main() -> Result<(), Error> {
 }
 
 async fn bam_header(event: Value, _: Context) -> Result<Value, Error> {
-    //
     // we expect an event context like
     // {
     //   "bam": "s3://mybucket/mybam.bam"
@@ -36,23 +30,17 @@ async fn bam_header(event: Value, _: Context) -> Result<Value, Error> {
     println!("Testing header of BAM file {}", s3_url);
 
     // WARNING: Disable for production use as it prints out secret tokens to CloudWatch!
-    hts_set_log_level(10);
+    // hts_set_log_level(10);
 
-    // Get some lowlevel libcurl action on hfile_curl/s3 from htslib
-    let reader = BamReader::new(s3_url);
-
-    let bam_head = reader.unwrap().target_names();
-
-    // we both print out the bam header target names (will appear in lambda cloud watch logs)
-    for i in &bam_head {
-        println!("{}", i);
-    }
+    // Get some lowlevel libcurl action on hfile_curl/s3 from htslib and fetch the header
+    let bam = bam::Reader::from_url(&s3_url).unwrap();
+    let header = bam::Header::from_template(bam.header()).to_bytes();
 
     // and return the array as a JSON object
-    Ok(json!(bam_head))
+    Ok(json!(header))
 }
 
-pub fn hts_set_log_level(level: u32) {
+pub fn _hts_set_log_level(level: u32) {
     unsafe {
         htslib::hts_set_log_level(level);
     }
