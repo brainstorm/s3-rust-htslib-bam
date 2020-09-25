@@ -31,27 +31,11 @@ $ sam local invoke -e event.json
 The output will show both the status of the lambda invoke - and if successful, the list of target names extracted from the BAM file, i.e:
 
 ```
-Invoking foo (provided)
-Skip pulling image and use local one: amazon/aws-sam-cli-emulation-image-provided:rapid-1.2.0.
+END RequestId: dbd528c7-858d-15e7-6067-9723ce1e643f
+REPORT RequestId: dbd528c7-858d-15e7-6067-9723ce1e643f  Init Duration: 139.11 ms        Duration: 2251.32 ms    Billed Duration: 2300 ms      M
+emory Size: 128 MB      Max Memory Used: 13 MB
 
-Mounting /Users/rvalls/dev/umccr/htsget/s3-rust-htslib-bam as /var/task:ro,delegated inside runtime container
-START RequestId: ad132130-ef6b-1eec-4e40-a76ac5054a4d Version: $LATEST
-Testing header of BAM file s3://umccr-research-dev/htsget/htsnexus_test_NA12878.bam
-[D::init_add_plugin] Loaded "knetfile"
-[D::init_add_plugin] Loaded "mem"
-[D::init_add_plugin] Loaded "crypt4gh-needed"
-[D::init_add_plugin] Loaded "libcurl"
-[D::init_add_plugin] Loaded "s3"
-[D::init_add_plugin] Loaded "s3w"
-*   Trying 52.95.134.108:443...
-* Connected to umccr-research-dev.s3.amazonaws.com (52.95.134.108) port 443 (#0)
-* ALPN, offering http/1.1
-* SSL certificate problem: unable to get local issuer certificate
-* Closing connection 0
-[E::easy_errno] Libcurl reported error 60 (SSL peer certificate or SSH remote key was not OK)
-[E::hts_open_format] Failed to open file "s3://umccr-research-dev/htsget/htsnexus_test_NA12878.bam" : I/O error
-thread 'main' panicked at 'called `Result::unwrap()` on an `Err` value: BamOpen { source: Open { target: "s3://umccr-research-dev/htsget/htsnex
-us_test_NA12878.bam" } }', src/main.rs:42:20
-note: run with `RUST_BACKTRACE=1` environment variable to display a backtrace
-Function 'htsgetAws' timed out after 3 seconds
+["1","2","3","4","5","6","7","8","9","10","11","12","13","14","15","16","17","18","19","20","21","22","X","Y","MT","GL000207.1","GL000226.1","G
+L000229.1","GL000231.1","GL000210.1","GL000239.1","GL000235.1","GL000201.1","GL000247.1","GL000245.1","GL000197.1","GL000203.1","GL000246.1",
+(...)
 ```
