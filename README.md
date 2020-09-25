@@ -8,7 +8,7 @@ To make this work, this README assumes the following prerequisites:
 
 1. You are already authenticated against AWS (with either environment credentials or AWS_PROFILE set) - in an
      account that you can deploy CloudFormation stacks/lambdas.
-2. [AWS SAM](https://aws.amazon.com/sam/) is properly installed.
+2. [AWS SAM](https://aws.amazon.com/serverless/sam/) is properly installed.
 3. You have a [functioning Rust(up) installation](https://rustup.rs/),
      docker and [`cross`](https://github.com/rust-embedded/cross).
 4. You have jq installed (for the lambda invoke - feel free to just replace with cat)
