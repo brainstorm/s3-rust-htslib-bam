@@ -6,6 +6,7 @@ Resources:
       Handler: foo
       Runtime: provided
       MemorySize: 128
+      Timeout: 30
       CodeUri: .
       Environment:
         Variables:
