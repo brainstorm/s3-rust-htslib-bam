@@ -329,7 +329,7 @@ dependencies = [
 [[package]]
 name = "hts-sys"
 version = "1.10.3"
-source = "git+https://github.com/rust-bio/rust-htslib.git#bf21f3bf781c0d6d201a8325c0efe5a222d37a4f"
+source = "git+https://github.com/brainstorm/rust-htslib.git?branch=htslib_1.11_osx_fix#f92367a707c43bc9dd870e0e127937c9f6e28b11"
 dependencies = [
  "bzip2-sys",
  "cc",
@@ -778,7 +778,7 @@ checksum = "26412eb97c6b088a6997e05f69403a802a92d520de2f8e63c2b65f9e0f47c4e8"
 [[package]]
 name = "rust-htslib"
 version = "0.32.1-alpha.0"
-source = "git+https://github.com/rust-bio/rust-htslib.git#bf21f3bf781c0d6d201a8325c0efe5a222d37a4f"
+source = "git+https://github.com/brainstorm/rust-htslib.git?branch=htslib_1.11_osx_fix#f92367a707c43bc9dd870e0e127937c9f6e28b11"
 dependencies = [
  "bio-types",
  "custom_derive",

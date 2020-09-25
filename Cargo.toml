@@ -12,7 +12,7 @@ serde_derive = "^1"
 serde_json = "^1"
 lambda = { version = "0.1.0", git = "https://github.com/awslabs/aws-lambda-rust-runtime" }
 lambda-attributes = { version = "0.1.0", git = "https://github.com/awslabs/aws-lambda-rust-runtime" }
-rust-htslib = { git = "https://github.com/rust-bio/rust-htslib.git", features = ["s3", "static"] }
+rust-htslib = { git = "https://github.com/brainstorm/rust-htslib.git", branch="htslib_1.11_osx_fix", features = ["s3", "static"] }
 
 tokio = { version = "0.2.19", features = ["full"] }
 tokio-codec = "0.2.0-alpha.6"
