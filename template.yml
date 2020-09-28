@@ -11,5 +11,11 @@ Resources:
       Environment:
         Variables:
           CURL_CA_BUNDLE: cert.pem
+      Events:
+        foo:
+          Type: Api
+          Properties:
+            Path: /reads
+            Method: get
     Metadata:
       BuildMethod: makefile
