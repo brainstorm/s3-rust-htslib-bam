@@ -15,7 +15,7 @@ Resources:
         foo:
           Type: Api
           Properties:
-            Path: /reads
+            Path: /reads/{proxy+}
             Method: get
     Metadata:
       BuildMethod: makefile

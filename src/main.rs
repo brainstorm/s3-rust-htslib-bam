@@ -17,7 +17,7 @@ async fn bam_header(event: Value, _: Context) -> Result<Value, Error> {
     // {
     //   "bam": "s3://mybucket/mybam.bam"
     // }
-
+    dbg!("Incoming lambda event is: ", event);
     let s3_url = match event.get("bam") {
         Some(a) => Url::parse(&a.as_str().unwrap()).unwrap(),
         None => {
