@@ -11,8 +11,9 @@ Resources:
       Environment:
         Variables:
           CURL_CA_BUNDLE: cert.pem
+# In case you wanted to run API Gateway...
       Events:
-        foo:
+        testEvent:
           Type: Api
           Properties:
             Path: /reads/{proxy+}
