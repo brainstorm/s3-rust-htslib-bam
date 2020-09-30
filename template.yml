@@ -1,0 +1,22 @@
+Resources:
+  htsgetAws:
+    Type: AWS::Serverless::Function
+    Properties:
+      FunctionName: htsget-aws
+      Handler: foo
+      Runtime: provided
+      MemorySize: 128
+      Timeout: 30
+      CodeUri: .
+      Environment:
+        Variables:
+          CURL_CA_BUNDLE: cert.pem
+# In case you wanted to run API Gateway...
+      Events:
+        testEvent:
+          Type: Api
+          Properties:
+            Path: /reads/{proxy+}
+            Method: get
+    Metadata:
+      BuildMethod: makefile

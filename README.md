@@ -1,109 +1,45 @@
 # Read BAM header on an AWS lambda with rust-htslib
 
-This small Bioinformatics proof of concept that bundles [htslib](http://github.com/samtools/htslib) into an AWS Lambda for massive distributed computing. This only prints a BAM header, but I hope you see the massive scaling potential, hitting an S3 bucket with milions of concurrent lambdas will be interesting to see ;)
+This small Bioinformatics proof of concept that bundles [htslib](http://github.com/samtools/htslib) into
+ an AWS Lambda for massive distributed computing. This only prints a BAM header, but I hope you see the
+  massive scaling potential, hitting an S3 bucket with millions of concurrent lambdas will be interesting to see ;)
 
 To make this work, this README assumes the following prerequisites:
 
-1. You are already authenticated against AWS.
-2. [AWS CDK](https://aws.amazon.com/cdk/) is properly installed.
-3. You have a [functioning Rust(up) installation](https://rustup.rs/), docker and [`cross`](https://github.com/rust-embedded/cross).
-4. You pointed [`BUCKET` and `KEY` on `main.rs`](https://github.com/brainstorm/s3-rust-htslib-bam/blob/60389d7c637ce2f8c172c64f75659a519b3c4d4b/src/main.rs#L9) towards the BAM file you want to work with.
-5. Run with a proper Lambda HTTP payload (example in `deploy/lambda_test_event.json`).
+1. You are already authenticated against AWS (with either environment credentials or AWS_PROFILE set) - in an
+     account that you can deploy CloudFormation stacks/lambdas.
+2. [AWS SAM](https://aws.amazon.com/serverless/sam/) is properly installed.
+3. You have a [functioning Rust(up) installation](https://rustup.rs/),
+     docker and [`cross`](https://github.com/rust-embedded/cross).
 
-### **TODO: Properly parametrize points 4 and 5 for more ergonomic operation (via cdk.json or similar?).**
+If that is in order, clone this repository.
 
-If that is in order, clone this repository and build away with MUSL:
+Building the Rust binaries can be done via `cross`:
 
 ```
 $ cross build --release --target x86_64-unknown-linux-musl
 ```
 
-Then deploy with [AWS CDK](https://aws.amazon.com/cdk/):
+And then invoke or deploy the resulting `bootstrap` binary:
 
 ```
-$ cd deploy && cdk deploy
-rust-htslib-lambda: deploying...
-[0%] start: Publishing c59cf9536e04f460efe5bf09a3e7404d2f0dbf43be6a353e09e46c4e0b574d37:current
-[100%] success: Published c59cf9536e04f460efe5bf09a3e7404d2f0dbf43be6a353e09e46c4e0b574d37:current
-rust-htslib-lambda: creating CloudFormation changeset...
-
-
-
- ✅  rust-htslib-lambda
-
-Stack ARN:
-arn:aws:cloudformation:ap-southeast-2:<ACCT_ID>:stack/rust-htslib-lambda/33990140-a619-11ea-98e1-0a1a04ef0eac
+$ cp ./target/x86_64-unknown-linux-musl/release/bootstrap .
+$ sam local invoke -e event.json
 ```
 
-And finally, invoke the lambda:
+The output will show both the status of the lambda invoke - and if successful, the header records from the BAM file, i.e:
 
 ```
-$ aws lambda invoke --function-name "arn:aws:lambda:ap-southeast-2:<ACCT_ID>:function:rust-htslib-lambda" response.json
-{
-    "StatusCode": 200,
-    "FunctionError": "Unhandled",
-    "ExecutedVersion": "$LATEST"
-}
+END RequestId: dbd528c7-858d-15e7-6067-9723ce1e643f
+REPORT RequestId: dbd528c7-858d-15e7-6067-9723ce1e643f  Init Duration: 139.11 ms        Duration: 2251.32 ms    Billed Duration: 2300 ms      M
+emory Size: 128 MB      Max Memory Used: 13 MB
 
-$ jq . response.json 
-{
-  "errorType": "Runtime.ExitError",
-  "errorMessage": "RequestId: 1d98e743-00c8-4535-ac8b-0d4c7f2ee4a3 Error: Runtime exited with error: exit status 101"
-}
-```
-
-On another (tmux) terminal, before invoking the lambda function:
-
-```
-$ cw tail -f /aws/lambda/rust-htslib-lambda
+[
 (...)
-< HTTP/1.1 200 OK
-< x-amz-id-2: hash 
-< x-amz-request-id: hash
-< Date: Tue, 30 Jun 2020 05:46:22 GMT
-< Last-Modified: Thu, 07 May 2020 06:36:24 GMT
-< ETag: "6dc47e886b9f2ecef870af88da3ebdd6"
-< Accept-Ranges: bytes
-< Content-Type: binary/octet-stream
-< Content-Length: 2596799
-< Server: AmazonS3
-< 
-* Closing connection 0
-[src/main.rs:20] "BAM header targets are: {}" = "BAM header targets are: {}"
-[src/main.rs:20] res = [
-    "1",
-    "2",
-    "3",
-    "4",
-    "5",
-    "6",
-    "7",
-    "8",
-    "9",
-    "10",
-    "11",
-    "12",
-    "13",
-    "14",
-    "15",
-    "16",
-    "17",
-    "18",
-    "19",
-    "20",
-    "21",
-    "22",
-    "X",
-    "Y",
-    "MT",
-	(...)
-    "NC_007605",
-    "hs37d5",
-]
-END RequestId: fdd85a16-f4e0-4d35-9cca-7f35c696bf21
-REPORT RequestId: fdd85a16-f4e0-4d35-9cca-7f35c696bf21    Duration: 470.63 ms    Billed Duration: 500 ms    Memory Size: 128 MB    Max Memory Used: 7 MB
+"@SQ\tSN:HLA-DRB1*04:03:01\tLN:15246\tAS:GRCh38\tM5:ce0de8afd561fb1fb0d3acce94386a27\tUR:ftp://ftp.1000genomes.ebi.ac.uk/vol1/ftp/technical/reference/GRCh38_reference_genome/GRCh38_full_analysis_set_plus_decoy_hla.fa\tSP:Human",
+"@SQ\tSN:HLA-DRB1*07:01:01:01\tLN:16110\tAS:GRCh38\tM5:4063054a8189fbc81248b0f37b8273fd\tUR:ftp://ftp.1000genomes.ebi.ac.uk/vol1/ftp/technical/reference/GRCh38_reference_genome/GRCh38_full_analysis_set_plus_decoy_hla.fa\tSP:Human",
+"@SQ\tSN:HLA-DRB1*07:01:01:02\tLN:16120\tAS:GRCh38\tM5:a4b1a49cfe8fb2c98c178c02b6c64ed4\tUR:ftp://ftp.1000genomes.ebi.ac.uk/vol1/ftp/technical/reference/GRCh38_reference_genome/GRCh38_full_analysis_set_plus_decoy_hla.fa\tSP:Human",
+"@CO\t$known_indels_file(s) = ftp://ftp.1000genomes.ebi.ac.uk/vol1/ftp/technical/reference/GRCh38_reference_genome/other_mapping_resources/ALL.wgs.1000G_phase3.GRCh38.ncbi_remapper.20150424.shapeit2_indels.vcf.gz",
+"@CO\tFASTQ=ERR009378_1.fastq.gz",
+(...)
 ```
-
-Or via the AWS web console:
-
-![lambda http exec](img/rust-lambda-http-success.png)

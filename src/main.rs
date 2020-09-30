@@ -1,44 +1,50 @@
-use url::Url;
-
+use lambda::{handler_fn, Context};
+use rust_htslib::{bam, bam::Read, htslib};
 use serde_json::json;
-use lambda_http::{
-    handler,
-    lambda::{self, Context},
-    IntoResponse, Request//, RequestExt, Response,
-};
-use crate::reader::BamReader;
-use rust_htslib::htslib;
-
-pub mod reader;
-pub mod errors;
+use serde_json::Value;
+use url::Url;
 
 type Error = Box<dyn std::error::Error + Send + Sync + 'static>;
 
 #[tokio::main]
 async fn main() -> Result<(), Error> {
-    lambda::run(handler(bam_header)).await?;
+    lambda::run(handler_fn(bam_header)).await?;
     Ok(())
 }
 
-async fn bam_header(_event: Request, _: Context) -> Result<impl IntoResponse, Error> {
-    const BUCKET: &str = "umccr-research-dev";
-    const KEY: &str = "htsget/htsnexus_test_NA12878.bam";
+async fn bam_header(event: Value, _: Context) -> Result<Value, Error> {
+    // we expect an event context like
+    // {
+    //   "bam": "s3://mybucket/mybam.bam"
+    // }
+    //dbg!("Incoming lambda event is: ", &event);
+    let s3_url = match event.get("bam") {
+        Some(a) => Url::parse(&a.as_str().unwrap()).unwrap(),
+        None => {
+            return Ok(
+                json!({"error": "Must pass the S3 location of a BAM in as the 'bam' field of the lambda event"}),
+            );
+        }
+    };
 
-    // Get some lowlevel libcurl action on hfile_curl/s3 from htslib
-    // WARNING: Disable for production use as it prints out secret tokens on CloudWatch!
+    println!("Testing header of BAM file {}", s3_url);
+
+    // WARNING: Disable for production use as it prints out secret tokens to CloudWatch!
     // hts_set_log_level(10);
-    let bam_head = bam_header_s3(BUCKET, KEY).await;
 
-    Ok(json!(bam_head))
+    // Get some lowlevel libcurl action on hfile_curl/s3 from htslib and fetch the header
+    let bam = bam::Reader::from_url(&s3_url).unwrap();
+    let header = bam::Header::from_template(bam.header());
+
+    // convert the header to an array of strings so we can better see the result
+    let header_string = String::from_utf8(header.to_bytes()).unwrap();
+    let header_strings: Vec<&str> = header_string.lines().collect();
+
+    // and return the array as a JSON object
+    Ok(json!(header_strings))
 }
 
-async fn bam_header_s3(bucket: &str, key: &str) -> Vec<String> {
-    let s3_url = Url::parse(&("s3://".to_string() + &bucket + "/" + &key)).unwrap();
-    let reader = BamReader::new(s3_url);
-    return reader.unwrap().target_names();
-}
-
-pub fn hts_set_log_level(level: u32) {
+pub fn _hts_set_log_level(level: u32) {
     unsafe {
         htslib::hts_set_log_level(level);
     }
