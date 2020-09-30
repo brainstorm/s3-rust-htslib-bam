@@ -34,10 +34,14 @@ async fn bam_header(event: Value, _: Context) -> Result<Value, Error> {
 
     // Get some lowlevel libcurl action on hfile_curl/s3 from htslib and fetch the header
     let bam = bam::Reader::from_url(&s3_url).unwrap();
-    let header = bam::Header::from_template(bam.header()).to_bytes();
+    let header = bam::Header::from_template(bam.header());
+
+    // convert the header to an array of strings so we can better see the result
+    let header_string = String::from_utf8(header.to_bytes()).unwrap();
+    let header_strings: Vec<&str> = header_string.split("\n").collect();
 
     // and return the array as a JSON object
-    Ok(json!(header))
+    Ok(json!(header_strings))
 }
 
 pub fn _hts_set_log_level(level: u32) {
