@@ -38,7 +38,7 @@ async fn bam_header(event: Value, _: Context) -> Result<Value, Error> {
 
     // convert the header to an array of strings so we can better see the result
     let header_string = String::from_utf8(header.to_bytes()).unwrap();
-    let header_strings: Vec<&str> = header_string.split("\n").collect();
+    let header_strings: Vec<&str> = header_string.lines().collect();
 
     // and return the array as a JSON object
     Ok(json!(header_strings))
