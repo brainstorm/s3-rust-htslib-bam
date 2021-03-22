@@ -1,8 +1,6 @@
-# Read BAM header on an AWS lambda with rust-htslib
+# Read BAM header on an AWS lambda with Noodles
 
-This small Bioinformatics proof of concept that bundles [htslib](http://github.com/samtools/htslib) into
- an AWS Lambda for massive distributed computing. This only prints a BAM header, but I hope you see the
-  massive scaling potential, hitting an S3 bucket with millions of concurrent lambdas will be interesting to see ;)
+This small Bioinformatics proof of concept that bundles [noodles](http://github.com/zaeleus/noodles) into an AWS Lambda for massive distributed computing. This only prints a BAM header, but I hope you see the massive scaling potential, hitting an S3 bucket with millions of concurrent lambdas will be interesting to see ;)
 
 To make this work, this README assumes the following prerequisites:
 
@@ -14,16 +12,16 @@ To make this work, this README assumes the following prerequisites:
 
 If that is in order, clone this repository.
 
-Building the Rust binaries can be done via `cross`:
+Building the Rust binaries can be done via `cargo`, as usual:
 
 ```
-$ cross build --release --target x86_64-unknown-linux-musl
+$ cargo build --release --target x86_64-unknown-linux-gnu
 ```
 
 And then invoke or deploy the resulting `bootstrap` binary:
 
 ```
-$ cp ./target/x86_64-unknown-linux-musl/release/bootstrap .
+$ cp ./target/x86_64-unknown-linux-gnu/release/bootstrap .
 $ sam local invoke -e event.json
 ```
 

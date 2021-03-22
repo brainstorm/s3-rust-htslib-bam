@@ -1,21 +1,20 @@
 [package]
-name = "s3-htslib-bamheader"
-version = "0.1.0"
+name = "s3-bamheader"
+version = "0.2.0"
 authors = ["Roman Valls Guimera <brainstorm@nopcode.org>"]
 edition = "2018"
 
 [dependencies]
-url = { version = "2.1.1" }
+url = "2.1.1"
 serde = "^1"
 serde_derive = "^1"
 serde_json = "^1"
-lambda = { version = "0.1.0", git = "https://github.com/awslabs/aws-lambda-rust-runtime" }
-lambda-attributes = { version = "0.1.0", git = "https://github.com/awslabs/aws-lambda-rust-runtime" }
-rust-htslib = { git = "https://github.com/rust-bio/rust-htslib.git", branch="master", features = ["s3", "static"] }
-
-tokio = { version = "0.2.19", features = ["full"] }
-tokio-codec = "0.2.0-alpha.6"
-tokio-io = "0.2.0-alpha.6"
+lambda_runtime = "0.3.0"
+rusoto_core = "0.46.0"
+rusoto_s3 = "0.46.0"
+tokio = "1.0"
+noodles-bam = { git = "https://github.com/zaeleus/noodles" }
+noodles-sam = { git = "https://github.com/zaeleus/noodles" }
 
 [[ bin ]]
 name = "bootstrap"
