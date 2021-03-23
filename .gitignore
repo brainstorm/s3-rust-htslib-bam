@@ -1,8 +1,8 @@
 target
 *.zip
 cdk.out/
-sccache-poorman.sh
 /.idea/
 /.nvmrc
 response.json
 /node_modules/
+bootstrap
