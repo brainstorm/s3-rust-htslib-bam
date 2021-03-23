@@ -20,7 +20,7 @@ type Error = Box<dyn std::error::Error + Send + Sync + 'static>;
 
 #[tokio::main]
 async fn main() -> Result<(), Error> {
-    lambda_runtime::run(handler_fn(s3_read_bam_header)).await;
+    lambda_runtime::run(handler_fn(s3_read_bam_header)).await?;
     Ok(())
 }
 
@@ -31,16 +31,16 @@ async fn s3_read_bam_header(_: Value, _: Context) -> Result<Value, Error> {
 }
 
 /// Fetches S3 object
-async fn stream_s3_object() -> Result<Cursor<Vec<u8>>, S3Error> {
+async fn stream_s3_object() -> Result<Cursor<Vec<u8>>, Error> {
     let mut s3_obj_buffer = Cursor::new(Vec::new());
     let aws = Storage {
-        region: "ap-southeast-2".parse()?,
+        region: Region::ApSoutheast2,
         credentials: Credentials::from_instance_metadata()?,
         bucket: "umccr-primary-data-dev".to_string(),
     };
 
     let bucket = Bucket::new(&aws.bucket, aws.region, aws.credentials)?;
-    bucket.get_object_stream("sample-file.bam", &mut s3_obj_buffer).await;
+    bucket.get_object_stream("sample-file.bam", &mut s3_obj_buffer).await?;
     return Ok(s3_obj_buffer);
 }
 
