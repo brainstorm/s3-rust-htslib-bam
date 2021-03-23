@@ -6,7 +6,6 @@ use serde_json::{ json, Value };
 use s3::bucket::Bucket;
 use s3::creds::Credentials;
 use s3::region::Region;
-use s3::S3Error;
 
 use noodles_bam as bam;
 use noodles_sam as sam;
