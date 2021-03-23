@@ -12,7 +12,7 @@ serde_json = "^1"
 lambda_runtime = "0.3.0"
 #rusoto_core = "0.46.0"
 #rusoto_s3 = "0.46.0"
-rust-s3 = { git = "https://github.com/durch/rust-s3", version = "0.27.0-beta1" }
+rust-s3 = { git = "https://github.com/durch/rust-s3", version = "0.27.0-beta1", features = ["tokio-rustls-tls"] }
 tokio = { version = "1.0" }
 noodles-bam = { git = "https://github.com/zaeleus/noodles" }
 noodles-sam = { git = "https://github.com/zaeleus/noodles" }
