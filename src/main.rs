@@ -60,7 +60,8 @@ async fn read_bam_header(bam_bytes: Cursor<Vec<u8>>) -> Result<Value, Error> {
         Ok(json!({ "header": builder.build().to_string(),
                    "message": "success" }))
     } else {
-        Ok(json!({ "message": header }))
+        Ok(json!({ "header": header,
+                   "message": "success" }))
     }
 
 }
