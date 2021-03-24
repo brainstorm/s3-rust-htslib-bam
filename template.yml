@@ -2,9 +2,9 @@ Resources:
   htsgetAws:
     Type: AWS::Serverless::Function
     Properties:
-      FunctionName: htsget-aws
-      Handler: foo
-      Runtime: provided
+      FunctionName: s3-bamheader
+      Handler: s3_read_bam_header
+      Runtime: provided.al2
       MemorySize: 128
       Timeout: 30
       CodeUri: .
