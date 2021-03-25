@@ -2,9 +2,9 @@ version = 0.1
 [default]
 [default.deploy]
 [default.deploy.parameters]
-stack_name = "htsget-aws"
+stack_name = "s3Bam"
 s3_bucket = "aws-sam-cli-managed-default-samclisourcebucket-1v8v4fkgfc6w1"
-s3_prefix = "htsget-aws"
+s3_prefix = "s3Bam"
 region = "ap-southeast-2"
 confirm_changeset = true
 capabilities = "CAPABILITY_IAM"

@@ -1,22 +1,30 @@
+Transform: AWS::Serverless-2016-10-31
 Resources:
-  htsgetAws:
+  s3Bam:
     Type: AWS::Serverless::Function
+    Metadata:
+      BuildMethod: makefile
     Properties:
       FunctionName: s3-bamheader
-      Handler: s3_read_bam_header
+      Handler: bootstrap.is.real.handler
       Runtime: provided.al2
       MemorySize: 128
       Timeout: 30
       CodeUri: .
+      Tags:
+        "Creator": "rvalls"
+        "Deploy": "sam"
       Environment:
         Variables:
           CURL_CA_BUNDLE: cert.pem
-# In case you wanted to run API Gateway...
       Events:
-        testEvent:
+        RootEvent:
           Type: Api
           Properties:
-            Path: /reads/{proxy+}
-            Method: get
-    Metadata:
-      BuildMethod: makefile
+            Path: /
+            Method: any
+        GatewayEvent:
+          Type: Api
+          Properties:
+            Path: /{proxy+}
+            Method: any
