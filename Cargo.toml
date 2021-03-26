@@ -16,6 +16,9 @@ rust-s3 = { default-features = false, version = "0.27.0-beta11", features = ["to
 tokio = { version = "1.4.0" }
 noodles-bam = { git = "https://github.com/zaeleus/noodles" }
 noodles-sam = { git = "https://github.com/zaeleus/noodles" }
+simple_logger = "1.11.0"
+log = "0.4.14"
+
 
 [[ bin ]]
 name = "bootstrap"

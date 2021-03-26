@@ -1,7 +1,10 @@
 use std::io::Cursor;
 
 use lambda_runtime::{ handler_fn, Context, Error };
+//use serde::{Deserialize, Serialize};
 use serde_json::{ json, Value };
+use simple_logger::SimpleLogger;
+use log::LevelFilter;
 
 use s3::bucket::Bucket;
 use s3::creds::Credentials;
@@ -22,7 +25,9 @@ async fn main() -> Result<(), Error> {
     Ok(())
 }
 
-async fn s3_read_bam_header(_: Value, _: Context) -> Result<Value, Error> {
+async fn s3_read_bam_header(_event: Value, _ctx: Context) -> Result<Value, Error> {
+    SimpleLogger::new().with_level(LevelFilter::Info).init().unwrap();
+
     let s3_object = stream_s3_object().await?;
     let output = read_bam_header(s3_object).await?;
     Ok(json!({ "message": output }))
