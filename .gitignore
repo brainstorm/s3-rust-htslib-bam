@@ -1,8 +1,9 @@
 target
 *.zip
-cdk.out/
-/.idea/
-/.nvmrc
+cdk.out
+.idea
+.aws-sam
+.nvmrc
 response.json
-/node_modules/
+node_modules
 bootstrap
