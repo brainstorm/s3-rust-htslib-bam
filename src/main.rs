@@ -38,12 +38,12 @@ async fn stream_s3_object() -> Result<Cursor<Vec<u8>>, Error> {
     let mut s3_obj_buffer = Cursor::new(Vec::new());
     let aws = Storage {
         region: Region::ApSoutheast2,
-        credentials: Credentials::from_instance_metadata()?,
-        bucket: "umccr-primary-data-dev".to_string(),
+        credentials: Credentials::default()?,
+        bucket: "umccr-research-dev".to_string(),
     };
 
     let bucket = Bucket::new(&aws.bucket, aws.region, aws.credentials)?;
-    bucket.get_object_stream("sample-file.bam", &mut s3_obj_buffer).await?;
+    bucket.get_object_stream("/htsget/htsnexus_test_NA12878.bam", &mut s3_obj_buffer).await?;
     return Ok(s3_obj_buffer);
 }
 
