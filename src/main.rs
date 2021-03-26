@@ -1,6 +1,6 @@
 use std::io::Cursor;
 
-use lambda_runtime::{ handler_fn, Context };
+use lambda_runtime::{ handler_fn, Context, Error };
 use serde_json::{ json, Value };
 
 use s3::bucket::Bucket;
@@ -15,8 +15,6 @@ struct Storage {
     credentials: Credentials,
     bucket: String,
 }
-
-type Error = Box<dyn std::error::Error + Send + Sync + 'static>;
 
 #[tokio::main]
 async fn main() -> Result<(), Error> {
@@ -63,5 +61,4 @@ async fn read_bam_header(bam_bytes: Cursor<Vec<u8>>) -> Result<Value, Error> {
         Ok(json!({ "header": header,
                    "message": "success" }))
     }
-
 }
