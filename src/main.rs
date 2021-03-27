@@ -11,7 +11,6 @@ use s3::creds::Credentials;
 use s3::region::Region;
 
 use noodles_bam as bam;
-use noodles_sam as sam;
 
 struct Storage {
     region: Region,
@@ -44,6 +43,8 @@ async fn stream_s3_object() -> Result<Cursor<Vec<u8>>, Error> {
 
     let bucket = Bucket::new(&aws.bucket, aws.region, aws.credentials)?;
     bucket.get_object_stream("/htsget/htsnexus_test_NA12878.bam", &mut s3_obj_buffer).await?;
+    // Rewind buffer Cursor after writing, so that next reader can consume data 
+    s3_obj_buffer.set_position(0);
     return Ok(s3_obj_buffer);
 }
 
@@ -51,19 +52,6 @@ async fn stream_s3_object() -> Result<Cursor<Vec<u8>>, Error> {
 async fn read_bam_header(bam_bytes: Cursor<Vec<u8>>) -> Result<Value, Error> {
     let mut reader = bam::Reader::new(bam_bytes);
     let header = reader.read_header()?;
-
-    if header.is_empty() {
-        let reference_sequences = reader.read_reference_sequences()?;
-        let mut builder = sam::Header::builder();
-
-        for reference_sequence in reference_sequences {
-            builder = builder.add_reference_sequence(reference_sequence);
-        }
-
-        Ok(json!({ "header": builder.build().to_string(),
-                   "message": "success" }))
-    } else {
-        Ok(json!({ "header": header,
-                   "message": "success" }))
-    }
+    Ok(json!({ "header": header,
+               "message": "success" }))
 }
