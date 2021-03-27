@@ -12,11 +12,8 @@ Resources:
       Timeout: 30
       CodeUri: .
       Tags:
-        "Creator": "rvalls"
+        "Creator": "brainstorm"
         "Deploy": "sam"
-      Environment:
-        Variables:
-          CURL_CA_BUNDLE: cert.pem
       Events:
         RootEvent:
           Type: Api
