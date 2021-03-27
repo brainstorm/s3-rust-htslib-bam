@@ -29,7 +29,8 @@ async fn s3_read_bam_header(_event: Value, _ctx: Context) -> Result<Value, Error
 
     let s3_object = stream_s3_object().await?;
     let output = read_bam_header(s3_object).await?;
-    Ok(json!({ "message": output }))
+    dbg!(&output);
+    Ok(json!({ "message": &output }))
 }
 
 /// Fetches S3 object
