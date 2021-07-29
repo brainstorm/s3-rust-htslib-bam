@@ -1,6 +1,6 @@
 # Read BAM header on an AWS lambda with rust-htslib
 
-DEPRECATED: Please see the [C-less version of this proof of concept instead](https://github.com/umccr/s3-rust-noodles-bam). Safer, better.
+## **DEPRECATED: Please see the [C-less version of this proof of concept instead](https://github.com/umccr/s3-rust-noodles-bam). Safer, better.**
 
 This small Bioinformatics proof of concept that bundles [htslib](http://github.com/samtools/htslib) into
  an AWS Lambda for massive distributed computing. This only prints a BAM header, but I hope you see the
